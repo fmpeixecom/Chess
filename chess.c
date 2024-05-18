@@ -6,33 +6,33 @@
 #define GREEN "\x1B[32m"
 #define ORANGE "\x1B[33m"
 
-void mostrarTabuleiro(char deColuna, int deLinha, int paraLinha, char paraColuna, char casa[8][8], char prom);
-int validarTorre(char deColuna, int deLinha, int paraLinha, char paraColuna, char casa[8][8]);
-int validarCavalo(char deColuna, int deLinha, int paraLinha, char paraColuna, char casa[8][8]);
-int validarCasas(char deColuna, int deLinha, int paraLinha, char paraColuna, char casa[8][8]);
-int validarBispo(char deColuna, int deLinha, int paraLinha, char paraColuna, char casa[8][8]);
-int validarCanibalismo(char deColuna, int deLinha, int paraLinha, char paraColuna, char casa[8][8]);
-int validarRei(char deColuna, int deLinha, int paraLinha, char paraColuna, char casa[8][8]);
-int validarDamaCruz(char deColuna, int deLinha, int paraLinha, char paraColuna, char casa[8][8]);
-int validarDamaDiagonais(char deColuna, int deLinha, int paraLinha, char paraColuna, char casa[8][8]);
-int validarPeao(char deColuna, int deLinha, int paraLinha, char paraColuna, char casa[8][8]);
-int validarJogador(char casa[8][8], int deLinha, int deColuna);
-int validarFimJogo(int paraLinha, int paraColuna, char casa[8][8]);
-void casas(char casa[8][8]);
-int adicionarPontosCapturados(int paraLinha, int paraColuna, char casa[8][8]);
-int definirPecasCapturadas(int paraLinha, int paraColuna, char casa[8][8]);
-void mostrarBarraAvaliacao(int i);
+void showBoard(char deColuna, int deLinha, int paraLinha, char paraColuna, char casa[8][8], char prom);
+int validateRook(char deColuna, int deLinha, int paraLinha, char paraColuna, char casa[8][8]);
+int validateKnight(char deColuna, int deLinha, int paraLinha, char paraColuna, char casa[8][8]);
+int validateSquares(char deColuna, int deLinha, int paraLinha, char paraColuna, char casa[8][8]);
+int validateBishop(char deColuna, int deLinha, int paraLinha, char paraColuna, char casa[8][8]);
+int validateCanibalism(char deColuna, int deLinha, int paraLinha, char paraColuna, char casa[8][8]);
+int validateKing(char deColuna, int deLinha, int paraLinha, char paraColuna, char casa[8][8]);
+int validateQuennCross(char deColuna, int deLinha, int paraLinha, char paraColuna, char casa[8][8]);
+int validateQueenDiagonals(char deColuna, int deLinha, int paraLinha, char paraColuna, char casa[8][8]);
+int validatePawn(char deColuna, int deLinha, int paraLinha, char paraColuna, char casa[8][8]);
+int validatePlayer(char casa[8][8], int deLinha, int deColuna);
+int validateEndOfGame(int paraLinha, int paraColuna, char casa[8][8]);
+void squares(char casa[8][8]);
+int addCapturesPoints(int paraLinha, int paraColuna, char casa[8][8]);
+int defineCapturedPieces(int paraLinha, int paraColuna, char casa[8][8]);
+void showEvaluationBar(int i);
 void engine(char casa[8][8]);
-void engineReiPreto(char casa[8][8], int i, int j);
-void engineCavaloPreto(char casa[8][8], int i, int j);
-void engineBispoPreto(char casa[8][8], int i, int j);
-void engineTorrePreta(char casa[8][8], int i, int j);
-void enginePeaoPreto(char casa[8][8], int i, int j);
-void engineReiBranco(char casa[8][8], int i, int j);
-void engineCavaloBranco(char casa[8][8], int i, int j);
-void engineBispoBranco(char casa[8][8], int i, int j);
-void engineTorreBranco(char casa[8][8], int i, int j);
-void enginePeaoBranco(char casa[8][8], int i, int j);
+void engineBlackKing(char casa[8][8], int i, int j);
+void engineBlackKnight(char casa[8][8], int i, int j);
+void engineBlackBishop(char casa[8][8], int i, int j);
+void engineBlackRook(char casa[8][8], int i, int j);
+void engineBlackPawn(char casa[8][8], int i, int j);
+void engineWhiteKing(char casa[8][8], int i, int j);
+void engineWhiteKnight(char casa[8][8], int i, int j);
+void engineWhiteBishop(char casa[8][8], int i, int j);
+void engineWhiteRook(char casa[8][8], int i, int j);
+void engineWhitePawn(char casa[8][8], int i, int j);
 void legal(char casa[8][8]);
 void legalReiPreto(char casa[8][8], int i, int j);
 void legalCavaloPreto(char casa[8][8], int i, int j);
@@ -44,9 +44,9 @@ void legalCavaloBranco(char casa[8][8], int i, int j);
 void legalBispoBranco(char casa[8][8], int i, int j);
 void legalTorreBranco(char casa[8][8], int i, int j);
 void legalPeaoBranco(char casa[8][8], int i, int j);
-int jogadas = 0;
-int pontosCapturadosBrancos = 0;
-int pontosCapturadosPretos = 0;
+int moves = 0;
+int pointsCapturedWhite = 0;
+int pointsCapturedBlack = 0;
 char pecasCapturadasBrancas[16];
 int numeroPecasCapturadasBrancas = 0;
 char pecasCapturadasPretas[16];
@@ -130,7 +130,7 @@ int main()
     char paraColuna;
     char prom = ' ';
     system("clear");
-    casas(casa);
+    squares(casa);
 	while(1)
 	{        
 		printf("A peça que vai jogar está na casa: ");
@@ -139,13 +139,13 @@ int main()
 		getchar();
 		scanf("%c%d", &paraColuna, &paraLinha);
 		getchar();
-		mostrarTabuleiro(deColuna, deLinha, paraLinha, paraColuna, casa, prom);//chama-se a função mostrarTabuleiro
+		showBoard(deColuna, deLinha, paraLinha, paraColuna, casa, prom);//chama-se a função showBoard
 	}
 
     return 0;
 }
 
-void mostrarTabuleiro(char deColuna, int deLinha, int paraLinha, char paraColuna, char casa[8][8], char prom)
+void showBoard(char deColuna, int deLinha, int paraLinha, char paraColuna, char casa[8][8], char prom)
 {
     //corresponder a cada letra que o utilizador escreveu um número de coluna
     switch(deColuna)
@@ -215,7 +215,7 @@ void mostrarTabuleiro(char deColuna, int deLinha, int paraLinha, char paraColuna
     legal(casa);
     casa[9 - deLinha - 1][deColuna - 1] = casa[9 - paraLinha-1][paraColuna-1];
     casa[9 - paraLinha-1][paraColuna-1] = temporario;
-    if(validarCasas(deColuna, deLinha, paraLinha, paraColuna, casa) == 1)
+    if(validateSquares(deColuna, deLinha, paraLinha, paraColuna, casa) == 1)
     {
         printf(ORANGE"     ->A casa de destino tem que ser diferente da casa de partida\n"RESET);
     }
@@ -223,68 +223,68 @@ void mostrarTabuleiro(char deColuna, int deLinha, int paraLinha, char paraColuna
     {
         printf(ORANGE"      ->Coordenadas inválidas\n"RESET);
     }
-    else if(validarJogador(casa, deLinha, deColuna) == 1)
+    else if(validatePlayer(casa, deLinha, deColuna) == 1)
     {
         printf(ORANGE"     ->Não é a sua vez.\n"RESET);
     }
-    else if(validarCanibalismo(deColuna, deLinha, paraLinha, paraColuna, casa) == 1)
+    else if(validateCanibalism(deColuna, deLinha, paraLinha, paraColuna, casa) == 1)
     {
         printf(ORANGE"     ->Não pode capturar as suas próprias peças\n"RESET);
     }
-    else if(validarTorre(deColuna, deLinha, paraLinha, paraColuna, casa) == 1)
+    else if(validateRook(deColuna, deLinha, paraLinha, paraColuna, casa) == 1)
     {
         printf(ORANGE"     ->A Torre não pode saltar por cima de peças\n"RESET);
     }
-    else if(validarTorre(deColuna, deLinha, paraLinha, paraColuna, casa) == 2)
+    else if(validateRook(deColuna, deLinha, paraLinha, paraColuna, casa) == 2)
     {
         printf(ORANGE"     ->A torre move-se na horizontal ou vertical\n"RESET);
     }
-    else if(validarCavalo(deColuna, deLinha, paraLinha, paraColuna, casa) == 1)
+    else if(validateKnight(deColuna, deLinha, paraLinha, paraColuna, casa) == 1)
     {
         printf(ORANGE"     ->Movimento inválido do cavalo\n"RESET);
     }
-    else if(validarRei(deColuna, deLinha, paraLinha, paraColuna, casa) == 1)
+    else if(validateKing(deColuna, deLinha, paraLinha, paraColuna, casa) == 1)
     {
         printf(ORANGE"     ->O rei pode apenas mover-se para qualquer casa imediatemente ao lado\n"RESET);
     }
-    else if(validarBispo(deColuna, deLinha, paraLinha, paraColuna, casa) == 1)
+    else if(validateBishop(deColuna, deLinha, paraLinha, paraColuna, casa) == 1)
     {
         printf(ORANGE"     ->O bispo pode apenas mover-se na diagonal\n"RESET);
     }
-    else if(validarBispo(deColuna, deLinha, paraLinha, paraColuna, casa) == 2)
+    else if(validateBishop(deColuna, deLinha, paraLinha, paraColuna, casa) == 2)
     {
         printf(ORANGE"     ->O bispo não pode saltar por cima de peças\n"RESET);
     }
-    else if((validarDamaCruz(deColuna, deLinha, paraLinha, paraColuna, casa) == 1 && validarDamaDiagonais(deColuna, deLinha, paraLinha, paraColuna, casa) == 2) || (validarDamaCruz(deColuna, deLinha, paraLinha, paraColuna, casa) == 1 && validarDamaDiagonais(deColuna, deLinha, paraLinha, paraColuna, casa) == 1))
+    else if((validateQuennCross(deColuna, deLinha, paraLinha, paraColuna, casa) == 1 && validateQueenDiagonals(deColuna, deLinha, paraLinha, paraColuna, casa) == 2) || (validateQuennCross(deColuna, deLinha, paraLinha, paraColuna, casa) == 1 && validateQueenDiagonals(deColuna, deLinha, paraLinha, paraColuna, casa) == 1))
     {
         printf(ORANGE"     ->A dama não pode saltar por cima de peças\n"RESET);
     }
-    else if((validarDamaDiagonais(deColuna, deLinha, paraLinha, paraColuna, casa) == 1 && validarDamaCruz(deColuna, deLinha, paraLinha, paraColuna, casa) == 2) || (validarDamaDiagonais(deColuna, deLinha, paraLinha, paraColuna, casa) == 1 && validarDamaCruz(deColuna, deLinha, paraLinha, paraColuna, casa) == 1))
+    else if((validateQueenDiagonals(deColuna, deLinha, paraLinha, paraColuna, casa) == 1 && validateQuennCross(deColuna, deLinha, paraLinha, paraColuna, casa) == 2) || (validateQueenDiagonals(deColuna, deLinha, paraLinha, paraColuna, casa) == 1 && validateQuennCross(deColuna, deLinha, paraLinha, paraColuna, casa) == 1))
     {
         printf(ORANGE"     ->A dama pode apenas mover-se na vertical, horizontal e diagonal\n"RESET);
     }
-    else if((validarDamaCruz(deColuna, deLinha, paraLinha, paraColuna, casa) == 2 && validarDamaDiagonais(deColuna, deLinha, paraLinha, paraColuna, casa) == 1) || (validarDamaCruz(deColuna, deLinha, paraLinha, paraColuna, casa) == 2 && validarDamaDiagonais(deColuna, deLinha, paraLinha, paraColuna, casa) == 2))
+    else if((validateQuennCross(deColuna, deLinha, paraLinha, paraColuna, casa) == 2 && validateQueenDiagonals(deColuna, deLinha, paraLinha, paraColuna, casa) == 1) || (validateQuennCross(deColuna, deLinha, paraLinha, paraColuna, casa) == 2 && validateQueenDiagonals(deColuna, deLinha, paraLinha, paraColuna, casa) == 2))
     {
         printf(ORANGE"     ->A dama pode apenas mover-se na vertical, horizontal e diagonal\n"RESET);
     }
-    else if((validarDamaDiagonais(deColuna, deLinha, paraLinha, paraColuna, casa) == 2 && validarDamaCruz(deColuna, deLinha, paraLinha, paraColuna, casa) == 1) || (validarDamaDiagonais(deColuna, deLinha, paraLinha, paraColuna, casa) == 2 && validarDamaCruz(deColuna, deLinha, paraLinha, paraColuna, casa) == 2))
+    else if((validateQueenDiagonals(deColuna, deLinha, paraLinha, paraColuna, casa) == 2 && validateQuennCross(deColuna, deLinha, paraLinha, paraColuna, casa) == 1) || (validateQueenDiagonals(deColuna, deLinha, paraLinha, paraColuna, casa) == 2 && validateQuennCross(deColuna, deLinha, paraLinha, paraColuna, casa) == 2))
     {
         printf(ORANGE"     ->A dama pode apenas mover-se na vertical, horizontal e diagonal\n"RESET);
     }
-    else if(validarPeao(deColuna, deLinha, paraLinha, paraColuna, casa) == 1)
+    else if(validatePawn(deColuna, deLinha, paraLinha, paraColuna, casa) == 1)
     {
         printf(ORANGE"     ->Movimento inválido do peão\n"RESET);
     }
-    else if(validarPeao(deColuna, deLinha, paraLinha, paraColuna, casa) == 2)
+    else if(validatePawn(deColuna, deLinha, paraLinha, paraColuna, casa) == 2)
     {
-        printf(ORANGE"     ->O peão não pode saltar por cima de casas\n"RESET);
+        printf(ORANGE"     ->O peão não pode saltar por cima de squares\n"RESET);
     }
-    else if(validarFimJogo(paraLinha, paraColuna, casa) == 2)
+    else if(validateEndOfGame(paraLinha, paraColuna, casa) == 2)
     {
         printf("\n\n\n\n\n\n\n-------------------------------------------+ O jogador de brancas ganhou +------------------------------------------\n\n\n\n\n\n\n\n\n");
         exit(10);
     }
-    else if(validarFimJogo(paraLinha, paraColuna, casa) == 1)
+    else if(validateEndOfGame(paraLinha, paraColuna, casa) == 1)
     {
         printf("\n\n\n\n\n\n\n--------------------------------------------+ O jogador de pretas ganhou +------------------------------------------\n\n\n\n\n\n\n\n\n");
         exit(10);
@@ -295,29 +295,29 @@ void mostrarTabuleiro(char deColuna, int deLinha, int paraLinha, char paraColuna
     }
     else
     {
-        if(validarRei(deColuna, deLinha, paraLinha, paraColuna, casa) == 2)
+        if(validateKing(deColuna, deLinha, paraLinha, paraColuna, casa) == 2)
         {
             casa[7][7] = ' ';
             casa[7][5] = 'T';
         }
-        else if(validarRei(deColuna, deLinha, paraLinha, paraColuna, casa) == 3)
+        else if(validateKing(deColuna, deLinha, paraLinha, paraColuna, casa) == 3)
         {
             casa[7][0] = ' ';
             casa[7][3] = 'T';
         }
-        else if(validarRei(deColuna, deLinha, paraLinha, paraColuna, casa) == 4)
+        else if(validateKing(deColuna, deLinha, paraLinha, paraColuna, casa) == 4)
         {
             casa[0][7] = ' ';
             casa[0][5] = 't';
         }
-        else if(validarRei(deColuna, deLinha, paraLinha, paraColuna, casa) == 5)
+        else if(validateKing(deColuna, deLinha, paraLinha, paraColuna, casa) == 5)
         {
             casa[0][0] = ' ';
             casa[0][3] = 't';
         }
-        else if(validarPeao(deColuna, deLinha, paraLinha, paraColuna, casa) == 3)
+        else if(validatePawn(deColuna, deLinha, paraLinha, paraColuna, casa) == 3)
         {
-            if(jogadas % 2 == 0)//são as brancas
+            if(moves % 2 == 0)//são as brancas
             {
                 printf("Quer promover para (D, T, B, C):");
                 getchar();
@@ -333,9 +333,9 @@ void mostrarTabuleiro(char deColuna, int deLinha, int paraLinha, char paraColuna
                 casa[8 - deLinha][deColuna - 1] = prom;
             }
         }
-        adicionarPontosCapturados(paraLinha, paraColuna, casa);        
-        definirPecasCapturadas(paraLinha, paraColuna, casa);
-        if(validarPeao(deColuna, deLinha, paraLinha, paraColuna, casa) != 3)
+        addCapturesPoints(paraLinha, paraColuna, casa);        
+        defineCapturedPieces(paraLinha, paraColuna, casa);
+        if(validatePawn(deColuna, deLinha, paraLinha, paraColuna, casa) != 3)
         {
             casa[9 - paraLinha-1][paraColuna-1] = casa[9 - deLinha-1][deColuna-1];
             casa[9 - deLinha-1][deColuna-1] = ' ';
@@ -352,7 +352,7 @@ void mostrarTabuleiro(char deColuna, int deLinha, int paraLinha, char paraColuna
             }
             printf("%c", pecasCapturadasBrancas[i]);
         }
-        printf("    (%d pontos)", pontosCapturadosBrancos);
+        printf("    (%d pontos)", pointsCapturedWhite);
         printf("\n\n");
         printf("O jogador de pretas já capturou as peças: ");
         for(int i = 0; i < numeroPecasCapturadasPretas; i++)
@@ -363,9 +363,9 @@ void mostrarTabuleiro(char deColuna, int deLinha, int paraLinha, char paraColuna
             }
             printf("%c", pecasCapturadasPretas[i]);
         }
-        printf("    (%d pontos)", pontosCapturadosPretos);
+        printf("    (%d pontos)", pointsCapturedBlack);
         printf("\n\n");
-        if(jogadas % 2 == 1)
+        if(moves % 2 == 1)
         {
             printf("-------------------------------------------------------------É a vez das BRANCAS----------------------------------------------------------\n\n\n");
         }
@@ -374,7 +374,7 @@ void mostrarTabuleiro(char deColuna, int deLinha, int paraLinha, char paraColuna
             printf("-------------------------------------------------------------É a vez das PRETAS-----------------------------------------------------------\n\n\n");
         }
         engine(casa);
-	    if(jogadas % 2 == 1)
+	    if(moves % 2 == 1)
         {
             printf("        ");
             for(int i = 0; i < 8; i++)//mostra a linha de cima
@@ -385,7 +385,7 @@ void mostrarTabuleiro(char deColuna, int deLinha, int paraLinha, char paraColuna
             printf("\n");
             for(int i = 0; i < 16; i++)//linhas
             {
-                mostrarBarraAvaliacao(i);
+                showEvaluationBar(i);
                 printf("%d. |", 8 - i/2);
                 for(int j = 0; j < 8; j++)//colunas
                 {
@@ -401,22 +401,22 @@ void mostrarTabuleiro(char deColuna, int deLinha, int paraLinha, char paraColuna
                 }
                 printf("\n");
                 i++;
-                mostrarBarraAvaliacao(i);
+                showEvaluationBar(i);
                 printf("   ");
-                for(int j = 0; j < 8; j++)//escreve uma linha depois de cada conjunto de 8 casas
+                for(int j = 0; j < 8; j++)//escreve uma linha depois de cada conjunto de 8 squares
                 {
                     printf("+---");
                 }
                 printf("+");
                 printf("\n");
             }
-            if(pontosCapturadosBrancos+vantagemBranca > pontosCapturadosPretos+vantagemPreta)
+            if(pointsCapturedWhite+vantagemBranca > pointsCapturedBlack+vantagemPreta)
             {
-                printf(" +%.1f", pontosCapturadosBrancos+vantagemBranca-pontosCapturadosPretos-vantagemPreta);
+                printf(" +%.1f", pointsCapturedWhite+vantagemBranca-pointsCapturedBlack-vantagemPreta);
             }
-            else if(pontosCapturadosPretos+vantagemPreta > pontosCapturadosBrancos+vantagemBranca)
+            else if(pointsCapturedBlack+vantagemPreta > pointsCapturedWhite+vantagemBranca)
             {
-                printf(" -%.1f.1", pontosCapturadosPretos+vantagemPreta-pontosCapturadosBrancos-vantagemBranca);
+                printf(" -%.1f.1", pointsCapturedBlack+vantagemPreta-pointsCapturedWhite-vantagemBranca);
             }
             else
             {
@@ -435,7 +435,7 @@ void mostrarTabuleiro(char deColuna, int deLinha, int paraLinha, char paraColuna
             printf("\n");
             for(int i = 0; i < 16; i++)
             {
-                mostrarBarraAvaliacao(15-i);
+                showEvaluationBar(15-i);
                 printf("%d. |", i/2+1);
                 for(int j = 0; j < 8; j++)
                 {
@@ -451,7 +451,7 @@ void mostrarTabuleiro(char deColuna, int deLinha, int paraLinha, char paraColuna
                 }
                 printf("\n");
                 i++;
-                mostrarBarraAvaliacao(15-i);
+                showEvaluationBar(15-i);
                 printf("   ");
                 for(int j = 0; j < 8; j++)
                 {
@@ -459,13 +459,13 @@ void mostrarTabuleiro(char deColuna, int deLinha, int paraLinha, char paraColuna
                 }
                 printf("+\n");
             }
-            if(pontosCapturadosBrancos+vantagemBranca > pontosCapturadosPretos+vantagemPreta)
+            if(pointsCapturedWhite+vantagemBranca > pointsCapturedBlack+vantagemPreta)
             {
-                printf(" +%.1f", pontosCapturadosBrancos+vantagemBranca-pontosCapturadosPretos-vantagemPreta);
+                printf(" +%.1f", pointsCapturedWhite+vantagemBranca-pointsCapturedBlack-vantagemPreta);
             }
-            else if(pontosCapturadosPretos+vantagemPreta > pontosCapturadosBrancos+vantagemBranca)
+            else if(pointsCapturedBlack+vantagemPreta > pointsCapturedWhite+vantagemBranca)
             {
-                printf(" -%.1f", pontosCapturadosPretos+vantagemPreta-pontosCapturadosBrancos-vantagemBranca);
+                printf(" -%.1f", pointsCapturedBlack+vantagemPreta-pointsCapturedWhite-vantagemBranca);
             }
             else
             {
@@ -473,14 +473,14 @@ void mostrarTabuleiro(char deColuna, int deLinha, int paraLinha, char paraColuna
             }
             printf("     H   G   F   E   D   C   B   A\n");
         }
-        jogadas++;
+        moves++;
         printf("\n");
     }
 }
 
-void casas(char casa[8][8]) //define as casas iniciais
+void squares(char casa[8][8]) //define as squares iniciais
 {
-    //definir as casas sem peças como espaço para formatar
+    //definir as squares sem peças como espaço para formatar
     for(int i = 0; i < 8; i++)
     {
         for(int j = 0; j < 8; j++)
@@ -490,7 +490,7 @@ void casas(char casa[8][8]) //define as casas iniciais
     }
     //definir as posições iniciais das peças
     //peças brancas
-    for(int i = 0; i < 8; i++)//definir todas as casas da linha 2 (casa[6]) como peões
+    for(int i = 0; i < 8; i++)//definir todas as squares da linha 2 (casa[6]) como peões
     {
         casa[6][i] = 'P';
     }
@@ -503,7 +503,7 @@ void casas(char casa[8][8]) //define as casas iniciais
     casa[7][3] = 'D';
     casa[7][4] = 'R';
     // peças negras
-    for(int i = 0; i < 8; i++)//definir todas as casas da linha 7 (casa[1]) como peões
+    for(int i = 0; i < 8; i++)//definir todas as squares da linha 7 (casa[1]) como peões
     {
         casa[1][i] = 'p';
     }
@@ -548,22 +548,22 @@ printf("|");
         printf("+");
         printf("\n");
     }
-    if(pontosCapturadosBrancos == pontosCapturadosPretos)
+    if(pointsCapturedWhite == pointsCapturedBlack)
     {
         printf(" +0.1");
     }
-    else if(pontosCapturadosBrancos > pontosCapturadosPretos)
+    else if(pointsCapturedWhite > pointsCapturedBlack)
     {
-        printf(" +%d", pontosCapturadosBrancos-pontosCapturadosPretos);
+        printf(" +%d", pointsCapturedWhite-pointsCapturedBlack);
     }
     else
     {
-        printf(" -%d", pontosCapturadosPretos-pontosCapturadosBrancos);
+        printf(" -%d", pointsCapturedBlack-pointsCapturedWhite);
     }
     printf("     A   B   C   D   E   F   G   H  \n");//mostrar coordenadas
 }
 
-int validarTorre(char deColuna, int deLinha, int paraLinha, char paraColuna, char casa[8][8])
+int validateRook(char deColuna, int deLinha, int paraLinha, char paraColuna, char casa[8][8])
 {
     if(toupper(casa[8 - deLinha][deColuna - 1]) == 'T')
     {
@@ -635,7 +635,7 @@ int validarTorre(char deColuna, int deLinha, int paraLinha, char paraColuna, cha
     return 0;
 }
 
-int validarCavalo(char deColuna, int deLinha, int paraLinha, char paraColuna, char casa[8][8])
+int validateKnight(char deColuna, int deLinha, int paraLinha, char paraColuna, char casa[8][8])
 {
     if(casa[8 - deLinha][deColuna - 1] == 'C' || casa[8 - deLinha][deColuna - 1] == 'c')
     {
@@ -682,7 +682,7 @@ int validarCavalo(char deColuna, int deLinha, int paraLinha, char paraColuna, ch
     }
 }
 
-int validarCasas(char deColuna, int deLinha, int paraLinha, char paraColuna, char casa[8][8])
+int validateSquares(char deColuna, int deLinha, int paraLinha, char paraColuna, char casa[8][8])
 {
     if(deLinha == paraLinha && deColuna == paraColuna)
     {
@@ -698,7 +698,7 @@ int validarCasas(char deColuna, int deLinha, int paraLinha, char paraColuna, cha
     }
 }
 
-int validarCanibalismo(char deColuna, int deLinha, int paraLinha, char paraColuna, char casa[8][8])
+int validateCanibalism(char deColuna, int deLinha, int paraLinha, char paraColuna, char casa[8][8])
 {
     if(casa[8 - paraLinha][paraColuna - 1] != ' ')
     {
@@ -738,7 +738,7 @@ int validarCanibalismo(char deColuna, int deLinha, int paraLinha, char paraColun
     }
 }
 
-int validarRei(char deColuna, int deLinha, int paraLinha, char paraColuna, char casa[8][8])
+int validateKing(char deColuna, int deLinha, int paraLinha, char paraColuna, char casa[8][8])
 {
     if(toupper(casa[8 - deLinha][deColuna - 1]) == 'R')
     {
@@ -814,7 +814,7 @@ int validarRei(char deColuna, int deLinha, int paraLinha, char paraColuna, char 
     return 0;
 }
 
-int validarBispo(char deColuna, int deLinha, int paraLinha, char paraColuna, char casa[8][8])
+int validateBishop(char deColuna, int deLinha, int paraLinha, char paraColuna, char casa[8][8])
 {
     if(toupper(casa[8 - deLinha][deColuna - 1]) == 'B')
     {
@@ -887,7 +887,7 @@ int validarBispo(char deColuna, int deLinha, int paraLinha, char paraColuna, cha
     return 0;
 }
 
-int validarDamaCruz(char deColuna, int deLinha, int paraLinha, char paraColuna, char casa[8][8])
+int validateQuennCross(char deColuna, int deLinha, int paraLinha, char paraColuna, char casa[8][8])
 {
     if(toupper(casa[8 - deLinha][deColuna - 1]) == 'D')
     {
@@ -959,7 +959,7 @@ int validarDamaCruz(char deColuna, int deLinha, int paraLinha, char paraColuna, 
     return 0;
 }
 
-int validarDamaDiagonais(char deColuna, int deLinha, int paraLinha, char paraColuna, char casa[8][8])
+int validateQueenDiagonals(char deColuna, int deLinha, int paraLinha, char paraColuna, char casa[8][8])
 {
     if(toupper(casa[8 - deLinha][deColuna - 1]) == 'D')
     {
@@ -1032,7 +1032,7 @@ int validarDamaDiagonais(char deColuna, int deLinha, int paraLinha, char paraCol
     return 0;
 }
 
-int validarPeao(char deColuna, int deLinha, int paraLinha, char paraColuna, char casa[8][8])
+int validatePawn(char deColuna, int deLinha, int paraLinha, char paraColuna, char casa[8][8])
 {
     if(toupper(casa[8 - deLinha][deColuna - 1]) == 'P')
     {
@@ -1188,10 +1188,10 @@ int validarPeao(char deColuna, int deLinha, int paraLinha, char paraColuna, char
     return 0;
 }
 
-int validarJogador(char casa[8][8], int deLinha, int deColuna)
+int validatePlayer(char casa[8][8], int deLinha, int deColuna)
 {
-    if((jogadas % 2 == 0 && casa[8-deLinha][deColuna-1] == toupper(casa[8-deLinha][deColuna-1])) || 
-    (jogadas % 2 == 1 && casa[8-deLinha][deColuna-1] != toupper(casa[8-deLinha][deColuna-1])))
+    if((moves % 2 == 0 && casa[8-deLinha][deColuna-1] == toupper(casa[8-deLinha][deColuna-1])) || 
+    (moves % 2 == 1 && casa[8-deLinha][deColuna-1] != toupper(casa[8-deLinha][deColuna-1])))
     {
         return 0;
     }
@@ -1201,58 +1201,58 @@ int validarJogador(char casa[8][8], int deLinha, int deColuna)
     }
 }
 
-int adicionarPontosCapturados(int paraLinha, int paraColuna, char casa[8][8])
+int addCapturesPoints(int paraLinha, int paraColuna, char casa[8][8])
 {
-    if(jogadas % 2 == 0)
+    if(moves % 2 == 0)
     {
         switch(casa[8-paraLinha][paraColuna-1])
         {
             case 'p':
-                pontosCapturadosBrancos++;
+                pointsCapturedWhite++;
                 break;
             case 'c':
-                pontosCapturadosBrancos+=3;
+                pointsCapturedWhite+=3;
                 break;
             case 'b':
-                pontosCapturadosBrancos+=3;
+                pointsCapturedWhite+=3;
                 break;
             case 't':
-                pontosCapturadosBrancos+=5;
+                pointsCapturedWhite+=5;
                 break;
             case 'd':
-                pontosCapturadosBrancos+=9;
+                pointsCapturedWhite+=9;
                 break;
         }
     }
-    else if(jogadas % 2 == 1)
+    else if(moves % 2 == 1)
     {
         switch(casa[8-paraLinha][paraColuna-1])
         {
             case 'P':
-                pontosCapturadosPretos++;
+                pointsCapturedBlack++;
                 break;
             case 'C':
-                pontosCapturadosPretos+=3;
+                pointsCapturedBlack+=3;
                 break;
             case 'B':
-                pontosCapturadosPretos+=3;
+                pointsCapturedBlack+=3;
                 break;
             case 'T':
-                pontosCapturadosPretos+=5;
+                pointsCapturedBlack+=5;
                 break;
             case 'D':
-                pontosCapturadosPretos+=9;
+                pointsCapturedBlack+=9;
                 break;
         }
     }
     return 0;
 }
 
-int validarFimJogo(int paraLinha, int paraColuna, char casa[8][8])
+int validateEndOfGame(int paraLinha, int paraColuna, char casa[8][8])
 {  
     if(toupper(casa[8-paraLinha][paraColuna-1]) == 'R')
     {
-        if(jogadas % 2 == 1)
+        if(moves % 2 == 1)
         {
             return 1;
         }
@@ -1267,11 +1267,11 @@ int validarFimJogo(int paraLinha, int paraColuna, char casa[8][8])
     }
 }
 
-int definirPecasCapturadas(int paraLinha, int paraColuna, char casa[8][8])
+int defineCapturedPieces(int paraLinha, int paraColuna, char casa[8][8])
 {
     if(casa[8-paraLinha][paraColuna-1] != ' ')
     {
-        if(jogadas % 2 == 0)
+        if(moves % 2 == 0)
         {
            pecasCapturadasBrancas[numeroPecasCapturadasBrancas] = casa[8-paraLinha][paraColuna-1]; 
            numeroPecasCapturadasBrancas++;
@@ -1285,9 +1285,9 @@ int definirPecasCapturadas(int paraLinha, int paraColuna, char casa[8][8])
     return 0;
 }
 
-void mostrarBarraAvaliacao(int i)
+void showEvaluationBar(int i)
 {
-    if((pontosCapturadosBrancos+vantagemBranca == pontosCapturadosPretos+vantagemPreta)
+    if((pointsCapturedWhite+vantagemBranca == pointsCapturedBlack+vantagemPreta)
      || (vantagemBranca < 1 && vantagemPreta < 1)
      || (abs(vantagemBranca - vantagemPreta) < 1))
     {
@@ -1300,9 +1300,9 @@ void mostrarBarraAvaliacao(int i)
             printf("|||| ");
         }
     }
-    else if(pontosCapturadosBrancos+vantagemBranca > pontosCapturadosPretos+vantagemPreta)
+    else if(pointsCapturedWhite+vantagemBranca > pointsCapturedBlack+vantagemPreta)
     {
-        if(i < 6/(pontosCapturadosBrancos+vantagemBranca-pontosCapturadosPretos-vantagemPreta))
+        if(i < 6/(pointsCapturedWhite+vantagemBranca-pointsCapturedBlack-vantagemPreta))
         {
             printf("|  | ");
         }
@@ -1313,7 +1313,7 @@ void mostrarBarraAvaliacao(int i)
     }
     else
     {
-        if(i < 16 - 6/(pontosCapturadosPretos+vantagemPreta-pontosCapturadosBrancos-vantagemBranca))
+        if(i < 16 - 6/(pointsCapturedBlack+vantagemPreta-pointsCapturedWhite-vantagemBranca))
         {
             printf("|  | ");
         }
@@ -1326,7 +1326,7 @@ void mostrarBarraAvaliacao(int i)
 
 void engine(char casa[8][8])
 {
-    if(jogadas % 2 == 0) //foi a jogada das bracas
+    if(moves % 2 == 0) //foi a jogada das bracas
     {
         vantagemBranca = 0;
         vantagemPreta = 0;
@@ -1336,11 +1336,11 @@ void engine(char casa[8][8])
             {
                 if(casa[i][j] != toupper(casa[i][j]))//a casa tem uma peça preta
                 {
-                    engineReiPreto(casa, i, j);
-                    engineCavaloPreto(casa, i, j);
-                    engineBispoPreto(casa, i, j);
-                    engineTorrePreta(casa, i, j);
-                    enginePeaoPreto(casa, i, j);
+                    engineBlackKing(casa, i, j);
+                    engineBlackKnight(casa, i, j);
+                    engineBlackBishop(casa, i, j);
+                    engineBlackRook(casa, i, j);
+                    engineBlackPawn(casa, i, j);
                 }
                 if(casa[i][j] == 'P')
                 {
@@ -1403,11 +1403,11 @@ void engine(char casa[8][8])
             {
                 if(casa[i][j] == toupper(casa[i][j]))//a casa tem uma peça preta
                 {
-                    engineReiBranco(casa, i, j);
-                    engineCavaloBranco(casa, i, j);
-                    engineBispoBranco(casa, i, j);
-                    engineTorreBranco(casa, i, j);
-                    enginePeaoBranco(casa, i, j);
+                    engineWhiteKing(casa, i, j);
+                    engineWhiteKnight(casa, i, j);
+                    engineWhiteBishop(casa, i, j);
+                    engineWhiteRook(casa, i, j);
+                    engineWhitePawn(casa, i, j);
                 }
                 if(casa[i][j] == 'P')
                 {
@@ -1462,7 +1462,7 @@ void engine(char casa[8][8])
     }
 }
 
-void engineReiPreto(char casa[8][8], int i, int j)
+void engineBlackKing(char casa[8][8], int i, int j)
 {
     if(casa[i][j] == 'r')
     {
@@ -1514,7 +1514,7 @@ void engineReiPreto(char casa[8][8], int i, int j)
     }
 }
 
-void engineCavaloPreto(char casa[8][8], int i, int j)
+void engineBlackKnight(char casa[8][8], int i, int j)
 {
     if(casa[i][j] == 'c')
     {
@@ -1577,7 +1577,7 @@ void engineCavaloPreto(char casa[8][8], int i, int j)
     }
 }
 
-void engineBispoPreto(char casa[8][8], int i, int j)
+void engineBlackBishop(char casa[8][8], int i, int j)
 {
     if(casa[i][j] == 'b' || casa[i][j] == 'd')
     {
@@ -1585,23 +1585,23 @@ void engineBispoPreto(char casa[8][8], int i, int j)
         {
             for(int d = -1; d < 2; d+=2)
             {
-                int casasAVerificarVertical = 0;
-                int casasAVerificarHorizontal  = 0;
+                int squaresAVerificarVertical = 0;
+                int squaresAVerificarHorizontal  = 0;
                 if(c == 1)
                 {
-                    casasAVerificarVertical = 7-i;
+                    squaresAVerificarVertical = 7-i;
                 }
                 else
                 {
-                    casasAVerificarVertical = i;
+                    squaresAVerificarVertical = i;
                 }
                 if(d == 1)
                 {
-                    casasAVerificarHorizontal = 7-j;
+                    squaresAVerificarHorizontal = 7-j;
                 }
                 else
                 {
-                    casasAVerificarHorizontal = j;
+                    squaresAVerificarHorizontal = j;
                 }
                 if(casa[i+c][j+d] == toupper(casa[i+c][j+d]) && casa[i+c][j+d] != ' ')
                 {
@@ -1644,7 +1644,7 @@ void engineBispoPreto(char casa[8][8], int i, int j)
                 }
                 else
                 {
-                    for(int a = 2; casa[i+c*(a-1)][j+d*(a-1)] == ' ' && a >=2 && a <= casasAVerificarHorizontal && a <= casasAVerificarVertical; a++)
+                    for(int a = 2; casa[i+c*(a-1)][j+d*(a-1)] == ' ' && a >=2 && a <= squaresAVerificarHorizontal && a <= squaresAVerificarVertical; a++)
                     {
                         if(casa[i+c*a][j+d*a] != ' ')//diagonal esquerda e cima
                         {
@@ -1703,7 +1703,7 @@ void engineBispoPreto(char casa[8][8], int i, int j)
     }    
 }
 
-void engineTorrePreta(char casa[8][8], int i, int j)
+void engineBlackRook(char casa[8][8], int i, int j)
 {
     if(casa[i][j] == 't' || casa[i][j] == 'd')
     {
@@ -1901,7 +1901,7 @@ void engineTorrePreta(char casa[8][8], int i, int j)
     }
 }
 
-void enginePeaoPreto(char casa[8][8], int i, int j)
+void engineBlackPawn(char casa[8][8], int i, int j)
 {
     if(casa[i][j] == 'p')
     {
@@ -1950,7 +1950,7 @@ void enginePeaoPreto(char casa[8][8], int i, int j)
     }
 }
 
-void engineReiBranco(char casa[8][8], int i, int j)
+void engineWhiteKing(char casa[8][8], int i, int j)
 {
     if(casa[i][j] == 'R')
     {
@@ -2002,7 +2002,7 @@ void engineReiBranco(char casa[8][8], int i, int j)
     }
 }
 
-void engineCavaloBranco(char casa[8][8], int i, int j)
+void engineWhiteKnight(char casa[8][8], int i, int j)
 {
     if(casa[i][j] == 'C')
     {
@@ -2065,7 +2065,7 @@ void engineCavaloBranco(char casa[8][8], int i, int j)
     }
 }
 
-void engineBispoBranco(char casa[8][8], int i, int j)
+void engineWhiteBishop(char casa[8][8], int i, int j)
 {
     if(casa[i][j] == 'B' || casa[i][j] == 'D')
     {
@@ -2073,23 +2073,23 @@ void engineBispoBranco(char casa[8][8], int i, int j)
         {
             for(int d = -1; d < 2; d+=2)
             {
-                int casasAVerificarVertical = 0;
-                int casasAVerificarHorizontal  = 0;
+                int squaresAVerificarVertical = 0;
+                int squaresAVerificarHorizontal  = 0;
                 if(c == 1)
                 {
-                    casasAVerificarVertical = 7-i;
+                    squaresAVerificarVertical = 7-i;
                 }
                 else
                 {
-                    casasAVerificarVertical = i;
+                    squaresAVerificarVertical = i;
                 }
                 if(d == 1)
                 {
-                    casasAVerificarHorizontal = 7-j;
+                    squaresAVerificarHorizontal = 7-j;
                 }
                 else
                 {
-                    casasAVerificarHorizontal = j;
+                    squaresAVerificarHorizontal = j;
                 }
                 if(casa[i+c][j+d] != toupper(casa[i+c][j+d]) && casa[i+c][j+d] != ' ')
                 {
@@ -2132,7 +2132,7 @@ void engineBispoBranco(char casa[8][8], int i, int j)
                 }
                 else
                 {
-                    for(int a = 2; casa[i+c*(a-1)][j+d*(a-1)] == ' ' && a >=2 && a <= casasAVerificarHorizontal && a <= casasAVerificarVertical; a++)
+                    for(int a = 2; casa[i+c*(a-1)][j+d*(a-1)] == ' ' && a >=2 && a <= squaresAVerificarHorizontal && a <= squaresAVerificarVertical; a++)
                     {
                         if(casa[i+c*a][j+d*a] != ' ')//diagonal esquerda e cima
                         {
@@ -2191,7 +2191,7 @@ void engineBispoBranco(char casa[8][8], int i, int j)
     } 
 }
 
-void engineTorreBranco(char casa[8][8], int i, int j)
+void engineWhiteRook(char casa[8][8], int i, int j)
 {
     if(casa[i][j] == 'T' || casa[i][j] == 'D')
     {
@@ -2389,7 +2389,7 @@ void engineTorreBranco(char casa[8][8], int i, int j)
     }
 }
 
-void enginePeaoBranco(char casa[8][8], int i, int j)
+void engineWhitePawn(char casa[8][8], int i, int j)
 {
     if(casa[i][j] == 'P')
     {
@@ -2440,7 +2440,7 @@ void enginePeaoBranco(char casa[8][8], int i, int j)
 
 void legal(char casa[8][8])
 {
-    if(jogadas % 2 == 0)
+    if(moves % 2 == 0)
     {
         for(int i = 0; i < 8; i++)
         {
@@ -2535,23 +2535,23 @@ void legalBispoPreto(char casa[8][8], int i, int j)
         {
             for(int d = -1; d < 2; d+=2)
             {
-                int casasAVerificarVertical = 0;
-                int casasAVerificarHorizontal  = 0;
+                int squaresAVerificarVertical = 0;
+                int squaresAVerificarHorizontal  = 0;
                 if(c == 1)
                 {
-                    casasAVerificarVertical = 7-i;
+                    squaresAVerificarVertical = 7-i;
                 }
                 else
                 {
-                    casasAVerificarVertical = i;
+                    squaresAVerificarVertical = i;
                 }
                 if(d == 1)
                 {
-                    casasAVerificarHorizontal = 7-j;
+                    squaresAVerificarHorizontal = 7-j;
                 }
                 else
                 {
-                    casasAVerificarHorizontal = j;
+                    squaresAVerificarHorizontal = j;
                 }
                 if(casa[i+c][j+d] == toupper(casa[i+c][j+d]) && casa[i+c][j+d] != ' ')
                 {
@@ -2562,7 +2562,7 @@ void legalBispoPreto(char casa[8][8], int i, int j)
                 }
                 else
                 {
-                    for(int a = 2; casa[i+c*(a-1)][j+d*(a-1)] == ' ' && a >=2 && a <= casasAVerificarHorizontal && a <= casasAVerificarVertical; a++)
+                    for(int a = 2; casa[i+c*(a-1)][j+d*(a-1)] == ' ' && a >=2 && a <= squaresAVerificarHorizontal && a <= squaresAVerificarVertical; a++)
                     {
                         if(casa[i+c*a][j+d*a] != ' ')//diagonal esquerda e cima
                         {
@@ -2735,23 +2735,23 @@ void legalBispoBranco(char casa[8][8], int i, int j)
         {
             for(int d = -1; d < 2; d+=2)
             {
-                int casasAVerificarVertical = 0;
-                int casasAVerificarHorizontal  = 0;
+                int squaresAVerificarVertical = 0;
+                int squaresAVerificarHorizontal  = 0;
                 if(c == 1)
                 {
-                    casasAVerificarVertical = 7-i;
+                    squaresAVerificarVertical = 7-i;
                 }
                 else
                 {
-                    casasAVerificarVertical = i;
+                    squaresAVerificarVertical = i;
                 }
                 if(d == 1)
                 {
-                    casasAVerificarHorizontal = 7-j;
+                    squaresAVerificarHorizontal = 7-j;
                 }
                 else
                 {
-                    casasAVerificarHorizontal = j;
+                    squaresAVerificarHorizontal = j;
                 }
                 if(casa[i+c][j+d] != toupper(casa[i+c][j+d]) && casa[i+c][j+d] != ' ')
                 {
@@ -2762,7 +2762,7 @@ void legalBispoBranco(char casa[8][8], int i, int j)
                 }
                 else
                 {
-                    for(int a = 2; casa[i+c*(a-1)][j+d*(a-1)] == ' ' && a >=2 && a <= casasAVerificarHorizontal && a <= casasAVerificarVertical; a++)
+                    for(int a = 2; casa[i+c*(a-1)][j+d*(a-1)] == ' ' && a >=2 && a <= squaresAVerificarHorizontal && a <= squaresAVerificarVertical; a++)
                     {
                         if(casa[i+c*a][j+d*a] != ' ')//diagonal esquerda e cima
                         {
